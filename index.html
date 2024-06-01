@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#5490e5" id="themeColor"/>
+    <title>Micro-Weather</title>
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="120x120" href="images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="images/favicon/site.webmanifest">
+    <link rel="manifest" href="img/favicon/site.webmanifest" />
+    <!-- // favicon -->
+    <link href="./output.css" rel="stylesheet" />
+  </head>
+  <body class="font-ibm text-white bg-[#1f242e]" id="popup">
+    <h1 class="sr-only">Micro-Weather</h1>
+    <main>
+      <!-- Display Nowcast Weather Icon, Temperature -->
+      <section>
+        <h2 class="sr-only">현재 온도</h2>
+        <article class="flex justify-center items-center mt-8 mb-8 gap-4">
+          <img class="w-24" src="images/loading.png" alt="불러오는 중" id="ncstImg" /> <!-- Weather Image -->
+          <h3 class="text-7xl font-bold" id="ncstTemp">-°</h3> <!-- Temperature -->
+        </article>
+      </section>
+      <!-- // Display Nowcast Weather Icon, Temperature -->
+      <!-- Display Location, Precipitation, Humidity -->
+      <section>
+        <h2 class="sr-only">현재 지역과 강수량, 습도</h2>
+        <article class="flex justify-center gap-4">
+          <h3 class="text-xl font-bold" id="location">-</h3> <!-- Location -->
+          <div class="text-lg ml-4">
+            <div class="flex mb-3 font-pretendard">
+              <img class="w-7 mr-2" src="images/loading.png" alt="불러오는 중" id="ncstPrecipitationImg"/> <!-- Precipitation Image -->
+              <h3 id="ncstPrecipitation">강수량 - mm</h3> <!-- Precipitation -->
+            </div>
+            <div class="flex">
+              <img class="w-7 mr-2" src="images/humidity.png" alt="습도" /> <!-- Humidity Image -->
+              <h3 id="ncstHumidity">습도 -%</h3> <!-- Humidity -->
+            </div>
+          </div>
+        </article>
+      </section>
+      <!-- // Display Location, Precipitation, Humidity -->
+      <!-- Display Particulate Matter Pollution Information -->
+      <section>
+        <h2 class="sr-only">현재 미세먼지 정보</h2>
+        <article class="mt-8">
+          <div class="flex justify-center">
+            <h2 class="p-2 mr-3 border-2 rounded-full font-bold" id="pm25">-</h2>
+            <div>
+              <h3 class="font-pretendard">초미세먼지</h3>
+              <h3 class="font-semibold" id="pm25Grade">-</h3> <!-- PM-2.5 -->
+            </div>
+            <h2 class="p-2 ml-8 mr-3 border-2 rounded-full font-bold" id="pm10">-</h2>
+            <div>
+              <h3 class="font-pretendard">미세먼지</h3>
+              <h3 class="font-bold" id="pm10Grade">-</h3> <!-- PM-10 -->
+            </div>
+          </div>
+          <div class="flex justify-center mt-4">
+            <svg fill="none" stroke-width="1.5" stroke="currentColor" class="size-6 mr-1" id="pmDataSrcInfoIcon">
+              <path d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/>
+            </svg>
+            <h3 class="font-pretendard" id="station">-</h3> <!-- PM Station -->
+          </div>
+        </article>
+        <article class="hidden fixed inset-1 z-50" id="pmDataSrcInfo">
+          <div class="flex flex-col items-center my-52 p-5 drop-shadow-lg rounded-md bg-white opacity-90 text-[#212631] lg:mx-[200px] xl:mx-[400px] 2xl:mx-[600px]" id="pmDataSrcInfoMsg">
+            <p>데이터는 실시간 관측된 자료이며 측정소 현지 사정이나 데이터 수신상태에 따라 미수신 될 수 있습니다.</p>
+            <p>출처 : 한국환경공단</p>
+          </div>
+        </article>
+      </section>
+      <!-- // Display Particulate Matter Pollution Information -->
+    </main>
+    <!-- Display Forecast Weather Data -->
+    <section>
+      <h2 class="sr-only">예보시점부터 6시간까지의 예보</h2>
+      <div class="border-t-2 mt-5 mb-4 mx-16 lg:mx-[200px] xl:mx-[400px] 2xl:mx-[600px]"></div> <!-- Break Line -->
+      <ol class="grid grid-cols-2 justify-items-center md:grid-cols-6 lg:mx-[200px] xl:mx-[400px] 2xl:mx-[600px]" id="fcstData">
+      </ol>
+    </section>
+    <!-- // Display Forecast Weather Data -->
+    <!-- Loading Screen -->
+    <section class="font-pretendard fixed inset-0 bg-gradient-to-b from-[#668fe5] to-[#d5b35e] z-50 items-center" id="loadingScreen">
+      <div class="grid justify-items-center mt-32">
+        <h2 class="text-5xl animate-[bounce_3s_infinite] md:text-7xl">🌞</h2>
+        <h3 class="mt-4 text-2xl animate-pulse md:text-4xl">날씨를 기다리고 있어요💦</h3>
+      </div>
+    </section>
+    <!-- // Loading Screen -->
+    <!-- Failure Screen -->
+    <section class="hidden font-pretendard fixed inset-0 bg-gradient-to-b from-[#668fe5] to-[#d5b35e] z-50 items-center" id="failureScreen">
+      <div class="grid justify-items-center mt-28">
+        <h3 class="mt-20 mx-4 text-xl md:tex-4xl">날씨를 불러오는데 실패했어요😥</h3>
+        <p class="mt-20 mx-14 text-sm md:text-xl" id="failureMsg1"></p>
+        <p class="mt-4 mx-14 text-sm md:text-xl" id="failureMsg2"></p>
+      </div>
+    </section>
+    <!-- // Failure Screen -->
+    <!-- Load JS Files -->
+    <script src="scripts/draw.js"></script>
+    <script src="scripts/init.js"></script>
+    <!-- // Load JS Files -->
+  </body>
+</html>
